@@ -1,22 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
+import { Switch, Route, Router } from 'react-router-dom'
+
+// CSS import
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-function App() {
-    return (
-        <div className="container">
-            <div className="row">
-                <div className="col-6">
-                    1
-                </div>
+// Components import
+import Navbar from './components/Navbar'
+import ProductList from './components/ProductList'
+import Details from './components/Details'
+import Cart from './components/Cart'
+import Default from './components/Default'
 
-                <div className="col-6">
-                    2
-                </div>
-            </div>
-        </div>
-    );
+export default class App extends Component {
+    render() {
+        return (
+            <React.Fragment>
+                <Navbar />
+
+                <Switch>
+                    <Route path='/' component={ ProductList } />
+                    <Route path='/details' component={ Details } />
+                    <Route path='/cart' component={ Cart } />
+                    <Route component={ Default } />
+                </Switch>
+
+            </React.Fragment>
+        )
+    }
 }
 
-export default App;
+
+
