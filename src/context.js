@@ -12,6 +12,10 @@ class ProductProvider extends Component {
             cart: [],
             modalOpen: false,
             modalProduct: detailProduct,
+
+            cartSubtotal: 0,
+            cartTax: 0,
+            cartTotal: 0,
         }
     }
 
@@ -45,25 +49,7 @@ class ProductProvider extends Component {
         })
     }
 
-    addToCart = (id) => {
-        let tempProducts = [...this.state.products]
-        const index = tempProducts.indexOf(this.getItem(id))
-        const product = tempProducts[index]
-
-        product.inCart = true
-        product.count = 1
-
-        const price = product.price
-        product.total = price
-
-        this.setState(() => {
-            return {
-                products: tempProducts,
-                cart: [...this.state.cart, product],
-            }
-        })
-    }
-
+    // Modal window functions
     openModal = (id) => {
         const product = this.getItem(id)
 
@@ -83,6 +69,65 @@ class ProductProvider extends Component {
         })
     }
 
+    // Cart functions
+    addToCart = (id) => {
+        let tempProducts = [...this.state.products]
+        const index = tempProducts.indexOf(this.getItem(id))
+        const product = tempProducts[index]
+
+        product.inCart = true
+        product.count = 1
+
+        const price = product.price
+        product.total = price
+
+        this.setState(
+            () => {
+                return {
+                    products: tempProducts,
+                    cart: [...this.state.cart, product],
+                }
+            }, 
+            () => {
+                this.addTotals()
+            }
+        )
+    }
+
+    increment = (id) => {
+        
+    }
+
+    decrement = (id) => {
+        
+    }
+
+    removeItem = (id) => {
+        
+    }
+
+    clearCart = () => {
+        
+    }
+
+    addTotals = () => {
+        let subTotal = 0
+
+        this.state.cart.map(item => {subTotal += item.total})
+
+        const tempTax = subTotal * 0.1
+        const tax = parseFloat(tempTax.toFixed(2))
+        const total = subTotal + tax
+
+        this.setState(() => {
+            return {
+                cartSubtotal: subTotal,
+                cartTax: tax,
+                cartTotal: total,
+            }
+        })
+    }
+
     render() {
         return (
             <ProductContext.Provider value={{ 
@@ -91,6 +136,10 @@ class ProductProvider extends Component {
                 addToCart: this.addToCart,
                 openModal: this.openModal,
                 closeModal: this.closeModal,
+                increment: this.increment,
+                decrement: this.decrement,
+                removeItem: this.removeItem,
+                clearCart: this.clearCart,
             }}>
                 { this.props.children }
             </ProductContext.Provider>
